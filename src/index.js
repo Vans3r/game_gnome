@@ -1,10 +1,18 @@
-require('./style.ccs')
+import './style.css';
+import gnomeImage from './images/gnome.png'
+
+const FIELD_SIZE = 16;
+const MOVE_INTERVAL = 2000
 
 function createGameBoard() {
-  const board = document.getElementById('game-board');
+  
+ const board = document.getElementById('game-board');
+  if (!board) {
+    throw new Error('Game board element not found');
+  }
   board.innerHTML = '';
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < FIELD_SIZE; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell';
     cell.id = `cell-${i}`;
@@ -14,7 +22,7 @@ function createGameBoard() {
 
 function createGnome() {
   const gnome = document.createElement('img');
-  gnome.src = './images/gnome.png';
+  gnome.src = gnomeImage;
   gnome.alt = 'Gnome';
   return gnome;
 }
@@ -36,13 +44,29 @@ function moveGnome(gnome) {
   newCell.appendChild(gnome);
 }
 
+let gnomeInterval
+
 document.addEventListener('DOMContentLoaded', () => {
   createGameBoard();
   const gnome = createGnome();
   const initialCell = getRandomCell();
-  initialCell.appendChild(gnome);
-  setInterval(() => moveGnome(gnome), 2000);
+  initialCell.append(gnome);
+  gnomeInterval = setInterval(() => moveGnome(gnome), MOVE_INTERVAL);
 });
+
+function stopGame() {
+  if (gnomeInterval) {
+    clearInterval(gnomeInterval); 
+    gnomeInterval = null;
+    console.log('Игра остановлена, таймер очищен');
+  }
+}
+
+ document.addEventListener('keydown',() => {
+    if (event.key === 'Escape') {
+      stopGame();
+    }
+  });;
 
 
 
