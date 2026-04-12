@@ -1,0 +1,1 @@
+![Deploy to GitHub Pages](https://github.com/Vans3r/gnome/actions/workflows/deploy.yml/badge.svg)
