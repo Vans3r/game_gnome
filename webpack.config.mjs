@@ -29,12 +29,12 @@ export default {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader, // извлекает CSS в отдельный файл
-          'css-loader' // обрабатывает CSS
+          MiniCssExtractPlugin.loader, 
+          'css-loader' 
         ]
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|tiff)$/i,
         type: 'asset/resource',
         generator: {
           filename: 'images/[name][ext]'
@@ -47,7 +47,7 @@ export default {
       template: './src/index.html'
     }),
     new MiniCssExtractPlugin({
-      filename: 'style.css' // имя выходного CSS‑файла
+      filename: 'style.css' 
     })
   ]
 };

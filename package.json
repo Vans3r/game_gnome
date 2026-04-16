@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack serve --mode development",
-    "test": "jest",
-    "lint": "eslint src/"
+    "build": "yarn webpack --mode production",
+    "dev": "yarn webpack serve --mode development",
+    "lint": "yarn eslint src/"
   },
   "keywords": [],
   "author": "",
