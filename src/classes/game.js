@@ -1,25 +1,26 @@
-import { Goblin } from './Goblin.js';
-import { ScoreManager } from './ScoreManager.js';
+import { Goblin } from './goblin.js';
+import { ScoreManager } from './scoreManager.js';
 import goblinImage from '../images/goblin.png';
 
 export class Game {
   constructor() {
     this.FIELD_SIZE = 16;
-    this.GOBLIN_DURATION = 1000; 
+    this.GOBLIN_DURATION = 1000;
     this.gameBoard = null;
     this.goblin = null;
     this.scoreManager = new ScoreManager();
     this.isGameRunning = false;
     this.goblinInterval = null;
+    this.previousCell = null;
+    this.keydownHandler = null; 
   }
 
   init() {
-    console.log('Game initialization started');
     this.createGameBoard();
     this.goblin = new Goblin(goblinImage, this.scoreManager);
     this.goblin.create();
     this.setupEventListeners();
-    console.log('Game initialized successfully');
+    this.startGame();
   }
 
   createGameBoard() {
@@ -39,7 +40,18 @@ export class Game {
 
   getRandomCell() {
     const cells = document.querySelectorAll('.cell');
-    const randomIndex = Math.floor(Math.random() * cells.length);
+    let randomIndex;
+    let previousIndex = -1;
+
+    if (this.previousCell) {
+      previousIndex = Array.from(cells).indexOf(this.previousCell);
+    }
+
+    do {
+      randomIndex = Math.floor(Math.random() * cells.length);
+    } while (randomIndex === previousIndex);
+
+    this.previousCell = cells[randomIndex];
     return cells[randomIndex];
   }
 
@@ -62,11 +74,12 @@ export class Game {
   }
 
   setupEventListeners() {
-    document.addEventListener('keydown', (event) => {
+    this.keydownHandler = (event) => {
       if (event.key === 'Escape') {
         this.endGame();
       }
-    });
+    };
+    document.addEventListener('keydown', this.keydownHandler);
   }
 
   startGame() {
@@ -80,6 +93,13 @@ export class Game {
       this.goblinInterval = null;
     }
     this.isGameRunning = false;
+    if (this.goblin) {
+      this.goblin.remove();
+    }
+    if (this.keydownHandler) {
+      document.removeEventListener('keydown', this.keydownHandler);
+      this.keydownHandler = null;
+    }
 
     alert(`Игра окончена! Ваш счёт: ${this.scoreManager.getScore()}`);
 
@@ -87,5 +107,6 @@ export class Game {
     cells.forEach(cell => {
       cell.innerHTML = '';
     });
+    this.previousCell = null;
   }
 }

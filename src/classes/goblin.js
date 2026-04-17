@@ -4,14 +4,21 @@ export class Goblin {
     this.element = null;
     this.currentCell = null;
     this.scoreManager = scoreManager;
+    this.clickHandler = null; 
   }
 
   create() {
+    if (this.element) {
+      this.remove();
+    }
+
     this.element = document.createElement('img');
     this.element.src = this.imagePath;
     this.element.alt = 'Goblin';
     this.element.className = 'goblin';
-    this.element.addEventListener('click', this.onClick.bind(this));
+
+    this.clickHandler = this.onClick.bind(this);
+    this.element.addEventListener('click', this.clickHandler);
   }
 
   appearInCell(cell) {
@@ -33,5 +40,16 @@ export class Goblin {
       this.scoreManager.addPoint();
       this.disappear();
     }
+  }
+  remove() {
+    if (this.element && this.clickHandler) {
+      this.element.removeEventListener('click', this.clickHandler);
+    }
+    if (this.currentCell && this.element) {
+      this.currentCell.removeChild(this.element);
+      this.currentCell = null;
+    }
+    this.element = null;
+    this.clickHandler = null;
   }
 }
