@@ -50,9 +50,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.14.0
-          cache: 'npm'
+          cache: 'yarn'
       - run: yarn
-      - run: npm build
+      - run: yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
